@@ -1,19 +1,14 @@
 package by.bsuir.cosi.lab1.stage;
 
 import by.bsuir.cosi.lab1.entity.GeneralFunction;
-import by.bsuir.cosi.lab1.logic.FunctionGenerator;
-import javafx.collections.ObservableList;
-import javafx.geometry.HPos;
-import javafx.geometry.Pos;
-import javafx.geometry.VPos;
-import javafx.scene.Scene;
+import by.bsuir.cosi.lab1.auxiliary.SeriesGenerator;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Button;
-import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
+
+import java.util.Map;
 
 public class SceneMaker {
 
@@ -26,7 +21,7 @@ public class SceneMaker {
     public static GridPane getMainGridPane(NumberAxis xAxis, NumberAxis yAxis, GeneralFunction generalFunction){
         LineChart<Number,Number> lineChart = new LineChart<Number,Number>(xAxis,yAxis);
 
-        XYChart.Series mainSeries= FunctionGenerator.mainFunction(generalFunction,"y=cos(3x)+sin(2x)");
+        XYChart.Series mainSeries= SeriesGenerator.mainFunction(generalFunction,"y=cos(3x)+sin(2x)");
 
         lineChart.getData().add(mainSeries);
         lineChart.setStyle("CHART_COLOR_1: #00ff21 ;");
@@ -43,13 +38,16 @@ public class SceneMaker {
         return gridPane;
     }
 
-    public static GridPane getMainGridPane1(NumberAxis xAxis, NumberAxis yAxis, GeneralFunction generalFunction){
+    public static GridPane getDPF(NumberAxis xAxis, NumberAxis yAxis, int N){
         LineChart<Number,Number> lineChart = new LineChart<Number,Number>(xAxis,yAxis);
 
-        XYChart.Series mainSeries= FunctionGenerator.mainFunction(generalFunction,"y=cos(3x)+sin(2x)");
+        XYChart.Series realDPFPart= SeriesGenerator.realDPFPart(N,"ReXm(m)");
+        XYChart.Series imgDPFPart=SeriesGenerator.imgDPFPart(N, "ImXm(m)");
 
-        lineChart.getData().add(mainSeries);
-        lineChart.setStyle("CHART_COLOR_1: #ff0021 ;");
+        lineChart.getData().add(realDPFPart);
+        lineChart.getData().add(imgDPFPart);
+        lineChart.setStyle("CHART_COLOR_1: #ff64e9 ;");
+        lineChart.setStyle("CHART_COLOR_2: #2ff7ff ;");
         lineChart.setCreateSymbols(false);
 
         GridPane gridPane=new GridPane();
@@ -62,5 +60,44 @@ public class SceneMaker {
 
         return gridPane;
     }
-    
+
+    public static GridPane getAmplitudes(NumberAxis xAxis, NumberAxis yAxis, Map<Integer, Double> amplitudeMap){
+        LineChart<Number,Number> lineChart = new LineChart<Number,Number>(xAxis,yAxis);
+
+        XYChart.Series amplitudeSeries= SeriesGenerator.seriesFromMap(amplitudeMap,"Amplitudes");
+
+        lineChart.getData().add(amplitudeSeries);
+        lineChart.setStyle("CHART_COLOR_1: #c821ff ;");
+        lineChart.setCreateSymbols(false);
+
+        GridPane gridPane=new GridPane();
+        gridPane.setGridLinesVisible(true);
+        gridPane.add(lineChart, 0, 0);
+
+        RowConstraints rowConstraints=new RowConstraints();
+        rowConstraints.setPercentHeight(100);
+        gridPane.getRowConstraints().add(rowConstraints);
+
+        return gridPane;
+    }
+
+    public static GridPane getPhases(NumberAxis xAxis, NumberAxis yAxis, Map<Integer, Double> phaseMap){
+        LineChart<Number,Number> lineChart = new LineChart<Number,Number>(xAxis,yAxis);
+
+        XYChart.Series phaseSeries= SeriesGenerator.seriesFromMap(phaseMap,"Phases");
+
+        lineChart.getData().add(phaseSeries);
+        lineChart.setStyle("CHART_COLOR_1: #ff9800 ;");
+        lineChart.setCreateSymbols(false);
+
+        GridPane gridPane=new GridPane();
+        gridPane.setGridLinesVisible(true);
+        gridPane.add(lineChart, 0, 0);
+
+        RowConstraints rowConstraints=new RowConstraints();
+        rowConstraints.setPercentHeight(100);
+        gridPane.getRowConstraints().add(rowConstraints);
+
+        return gridPane;
+    }
 }

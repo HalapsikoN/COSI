@@ -1,6 +1,8 @@
 package by.bsuir.cosi.lab1;
 
-import by.bsuir.cosi.lab1.entity.AxisGenerator;
+import by.bsuir.cosi.lab1.auxiliary.AxisGenerator;
+import by.bsuir.cosi.lab1.auxiliary.FunctionGenerator;
+import by.bsuir.cosi.lab1.entity.Complex;
 import by.bsuir.cosi.lab1.entity.GeneralFunction;
 import by.bsuir.cosi.lab1.stage.SceneMaker;
 import javafx.application.Application;
@@ -23,24 +25,40 @@ public class Fourier extends Application {
     private  int xSize=1800;
     private  int ySize=1000;
     private int currentScene=0;
+    private int m=16;
+    private int N=200;
 
     private Map<GridPane, Scene> SceneBuffer =new HashMap<GridPane, Scene>();
 
     public void start(Stage stage) throws Exception {
         stage.setTitle("COSI 1");
 
+        System.out.println("start");
+
         AxisGenerator axisGenerator=AxisGenerator.getInstance();
 
         GeneralFunction generalFunction=new GeneralFunction(axisGenerator.getXAxis().getLowerBound(), axisGenerator.getXAxis().getUpperBound(), 0.01);
 
         List<GridPane> gridPaneList=new LinkedList<GridPane>();
-        gridPaneList.add(SceneMaker.getMainGridPane(axisGenerator.getXAxis(), axisGenerator.getYAxis(), generalFunction));
-        gridPaneList.add(SceneMaker.getMainGridPane1(axisGenerator.getXAxis(), axisGenerator.getYAxis(), generalFunction));
 
+        gridPaneList.add(SceneMaker.getMainGridPane(axisGenerator.getXAxis(), axisGenerator.getYAxis(), generalFunction));
+
+        Map<Integer, Complex> dpfMap= FunctionGenerator.getDPFMap(N);
+        gridPaneList.add(SceneMaker.getDPF(axisGenerator.getCustomXAxis(0, N/2, "m"), axisGenerator.getCustomYAxis(-0.4, 0.4, "X(m)"), N));
+
+        Map<Integer, Double> amplitudeMap=FunctionGenerator.getAmplitudeMap(dpfMap);
+        gridPaneList.add(SceneMaker.getAmplitudes(axisGenerator.getCustomXAxis(0, N/2, "m"), axisGenerator.getCustomYAxis(-0.2, 0.5, ""), amplitudeMap));
+
+        Map<Integer, Double> phaseMap=FunctionGenerator.getPhaseMap(dpfMap);
+        gridPaneList.add(SceneMaker.getPhases(axisGenerator.getCustomXAxis(0, N/2, "m"), axisGenerator.getCustomYAxis(-78, 78, ""), phaseMap));
+
+        Map<Integer, Complex> returnDPFMap=FunctionGenerator.getReturnDPFMap(N, dpfMap);
+        System.out.println(returnDPFMap);
+
+        System.out.println(phaseMap);
 
         makeScene(stage, gridPaneList);
-
-
+        System.out.println("finish");
         stage.show();
     }
 

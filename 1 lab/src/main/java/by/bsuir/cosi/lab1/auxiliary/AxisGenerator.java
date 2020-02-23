@@ -1,4 +1,4 @@
-package by.bsuir.cosi.lab1.entity;
+package by.bsuir.cosi.lab1.auxiliary;
 
 import javafx.scene.chart.NumberAxis;
 
@@ -49,5 +49,25 @@ public class AxisGenerator {
         numberAxis.setTickUnit(modelAxis.getTickUnit());
 
         return numberAxis;
+    }
+
+    public NumberAxis getCustomXAxis(double min, double max, String name){
+        return getCustomNumberAxis(min, max, name, xAxis);
+    }
+
+    private NumberAxis getCustomNumberAxis(double min, double max, String name, NumberAxis xAxis) {
+        NumberAxis numberAxis=new NumberAxis();
+
+        numberAxis.setLabel((name.isEmpty())?xAxis.getLabel():name);
+        numberAxis.setAutoRanging(xAxis.isAutoRanging());
+        numberAxis.setLowerBound(min);
+        numberAxis.setUpperBound(max);
+        numberAxis.setTickUnit(xAxis.getTickUnit());
+
+        return numberAxis;
+    }
+
+    public NumberAxis getCustomYAxis(double min, double max, String name){
+        return getCustomNumberAxis(min, max, name, yAxis);
     }
 }
