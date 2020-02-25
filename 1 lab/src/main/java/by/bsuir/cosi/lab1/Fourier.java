@@ -15,17 +15,14 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Fourier extends Application {
 
     private  int xSize=1800;
     private  int ySize=1000;
     private int currentScene=0;
-    private int m=16;
+    private int NFFT=8;
     private int N=200;
 
     private Map<GridPane, Scene> SceneBuffer =new HashMap<GridPane, Scene>();
@@ -55,7 +52,28 @@ public class Fourier extends Application {
         Map<Integer, Complex> returnDPFMap=FunctionGenerator.getReturnDPFMap(N, dpfMap);
         System.out.println(returnDPFMap);
 
-        System.out.println(phaseMap);
+        List<Complex> complexList=new ArrayList<>();
+
+        for(int i=0; i<NFFT; ++i){
+            complexList.add(new Complex(FunctionGenerator.getValueOfMainFunction(i)));
+        }
+
+        List<Complex> resultFFT=FunctionGenerator.doBPF(complexList, NFFT, 1);
+
+        Map<Integer, Complex> resultFFTMap=new HashMap<>();
+
+        for(int i=0; i<NFFT; ++i){
+            resultFFTMap.put(i, resultFFT.get(i));
+        }
+
+        Map<Integer, Double> amplitudeMapFFT=FunctionGenerator.getAmplitudeMap(resultFFTMap);
+        gridPaneList.add(SceneMaker.getAmplitudes(axisGenerator.getCustomXAxis(0, NFFT, "m"), axisGenerator.getCustomYAxis(-5, 5, ""), amplitudeMapFFT));
+
+        Map<Integer, Double> phaseMapFFT=FunctionGenerator.getPhaseMap(resultFFTMap);
+        gridPaneList.add(SceneMaker.getPhases(axisGenerator.getCustomXAxis(0, NFFT, "m"), axisGenerator.getCustomYAxis(-10, 10, ""), phaseMapFFT));
+
+
+        System.out.println("\n"+resultFFT);
 
         makeScene(stage, gridPaneList);
         System.out.println("finish");

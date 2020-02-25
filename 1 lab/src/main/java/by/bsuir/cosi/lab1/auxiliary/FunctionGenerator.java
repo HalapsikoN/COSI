@@ -3,6 +3,7 @@ package by.bsuir.cosi.lab1.auxiliary;
 import by.bsuir.cosi.lab1.entity.Complex;
 import by.bsuir.cosi.lab1.entity.logic.ComplexLogic;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -108,8 +109,41 @@ public class FunctionGenerator {
         return result;
     }
 
-    public static List<Complex> doBPF(List<Double> a, int N, double dir){
+    public static List<Complex> doBPF(List<Complex> a, int N, double dir){
 
+        if(a.size()==1){
+            return a;
+        }
 
+        List<Complex> aEven=new ArrayList<>();
+        List<Complex> aOdd=new ArrayList<>();
+
+        for(int i=0; i<a.size(); ++i){
+            if(i%2==0){
+                aEven.add(a.get(i));
+            }else{
+                aOdd.add(a.get(i));
+            }
+        }
+
+        List<Complex> bEven=doBPF(aEven,N/2, dir);
+        List<Complex> bOdd=doBPF(aOdd,N/2, dir);
+
+        Complex mainRootN=new Complex(Math.cos(2*Math.PI/N), dir*Math.sin(2*Math.PI/N));
+        Complex temp=new Complex(1,0);
+
+        List<Complex> result=new ArrayList<>(N);
+
+        for(int i=0; i<N; ++i){
+            result.add(new Complex());
+        }
+
+        for (int j=0; j<N/2; ++j){
+            result.set(j, ComplexLogic.amountOfTwoComlex(bEven.get(j), ComplexLogic.multiplicationOfTwoComplex(temp, bOdd.get(j))));
+            result.set(j+N/2, ComplexLogic.subtractionOfTwoComlex(bEven.get(j), ComplexLogic.multiplicationOfTwoComplex(temp, bOdd.get(j))));
+            temp=ComplexLogic.multiplicationOfTwoComplex(temp, mainRootN);
+        }
+
+        return result;
     }
 }

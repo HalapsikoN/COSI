@@ -14,4 +14,20 @@ public class ComplexLogic {
     public static double getTan(Complex complex){
         return Math.tan(complex.getImaginary()/complex.getReal());
     }
+
+    public static Complex amountOfTwoComlex(Complex a, Complex b){
+        return new Complex(a.getReal()+b.getReal(), a.getImaginary()+b.getImaginary());
+    }
+
+    public static Complex subtractionOfTwoComlex(Complex a, Complex b){
+        return new Complex(a.getReal()-b.getReal(), a.getImaginary()-b.getImaginary());
+    }
+
+    public static Complex multiplicationOfTwoComplex(Complex a, Complex b){
+
+        double real=a.getReal()*b.getReal()-a.getImaginary()*b.getImaginary();
+        double imaginary=a.getImaginary()*b.getReal()+a.getReal()*b.getImaginary();
+
+        return new Complex(real, imaginary);
+    }
 }

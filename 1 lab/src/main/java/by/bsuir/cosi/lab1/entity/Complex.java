@@ -8,6 +8,10 @@ public class Complex {
     public Complex() {
     }
 
+    public Complex(double real) {
+        this.real = real;
+    }
+
     public Complex(double real, double imaginary) {
         this.real = real;
         this.imaginary = imaginary;
