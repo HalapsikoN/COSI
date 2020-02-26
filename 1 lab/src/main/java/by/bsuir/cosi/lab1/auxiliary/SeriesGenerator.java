@@ -64,6 +64,18 @@ public class SeriesGenerator {
         return series;
     }
 
+    public static XYChart.Series seriesFromMapWithOutNulling(Map<Integer, Double> map, String name){
+        XYChart.Series series = new XYChart.Series();
+
+        series.setName(name);
+        ObservableList listOfData = series.getData();
+        for (Integer i : map.keySet()) {
+            listOfData.add(new XYChart.Data(i, map.get(i)));
+        }
+
+        return series;
+    }
+
     private static void correctSeries(XYChart.Series series, Map<Integer, Double> map, double shift){
         ObservableList listOfData=series.getData();
         for (Integer i:map.keySet()){

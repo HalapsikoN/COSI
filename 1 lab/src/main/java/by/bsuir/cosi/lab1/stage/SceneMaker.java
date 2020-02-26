@@ -82,12 +82,34 @@ public class SceneMaker {
     }
 
     public static GridPane getPhases(NumberAxis xAxis, NumberAxis yAxis, Map<Integer, Double> phaseMap){
+        yAxis.setTickUnit(0.1);
+
         LineChart<Number,Number> lineChart = new LineChart<Number,Number>(xAxis,yAxis);
 
         XYChart.Series phaseSeries= SeriesGenerator.seriesFromMap(phaseMap,"Phases");
 
         lineChart.getData().add(phaseSeries);
         lineChart.setStyle("CHART_COLOR_1: #ff9800 ;");
+        lineChart.setCreateSymbols(false);
+
+        GridPane gridPane=new GridPane();
+        gridPane.setGridLinesVisible(true);
+        gridPane.add(lineChart, 0, 0);
+
+        RowConstraints rowConstraints=new RowConstraints();
+        rowConstraints.setPercentHeight(100);
+        gridPane.getRowConstraints().add(rowConstraints);
+
+        return gridPane;
+    }
+
+    public static GridPane getBackFunction(NumberAxis xAxis, NumberAxis yAxis, Map<Integer, Double> functionMap){
+        LineChart<Number,Number> lineChart = new LineChart<Number,Number>(xAxis,yAxis);
+
+        XYChart.Series functionSeries= SeriesGenerator.seriesFromMapWithOutNulling(functionMap,"Back function");
+
+        lineChart.getData().add(functionSeries);
+        lineChart.setStyle("CHART_COLOR_1: #0b00ff ;");
         lineChart.setCreateSymbols(false);
 
         GridPane gridPane=new GridPane();

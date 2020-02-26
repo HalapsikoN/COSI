@@ -23,7 +23,7 @@ public class Fourier extends Application {
     private  int ySize=1000;
     private int currentScene=0;
     private int NFFT=8;
-    private int N=200;
+    private int N=8;
 
     private Map<GridPane, Scene> SceneBuffer =new HashMap<GridPane, Scene>();
 
@@ -41,16 +41,21 @@ public class Fourier extends Application {
         gridPaneList.add(SceneMaker.getMainGridPane(axisGenerator.getXAxis(), axisGenerator.getYAxis(), generalFunction));
 
         Map<Integer, Complex> dpfMap= FunctionGenerator.getDPFMap(N);
-        gridPaneList.add(SceneMaker.getDPF(axisGenerator.getCustomXAxis(0, N/2, "m"), axisGenerator.getCustomYAxis(-0.4, 0.4, "X(m)"), N));
+        gridPaneList.add(SceneMaker.getDPF(axisGenerator.getCustomXAxis(0, N, "m"), axisGenerator.getCustomYAxis(-0.4, 0.8, "X(m)"), N));
 
         Map<Integer, Double> amplitudeMap=FunctionGenerator.getAmplitudeMap(dpfMap);
-        gridPaneList.add(SceneMaker.getAmplitudes(axisGenerator.getCustomXAxis(0, N/2, "m"), axisGenerator.getCustomYAxis(-0.2, 0.5, ""), amplitudeMap));
+        gridPaneList.add(SceneMaker.getAmplitudes(axisGenerator.getCustomXAxis(0, N, "m"), axisGenerator.getCustomYAxis(-0.2, 0.8, ""), amplitudeMap));
 
         Map<Integer, Double> phaseMap=FunctionGenerator.getPhaseMap(dpfMap);
-        gridPaneList.add(SceneMaker.getPhases(axisGenerator.getCustomXAxis(0, N/2, "m"), axisGenerator.getCustomYAxis(-78, 78, ""), phaseMap));
+        gridPaneList.add(SceneMaker.getPhases(axisGenerator.getCustomXAxis(0, N, "m"), axisGenerator.getCustomYAxis(-0.2, 0.2, ""), phaseMap));
 
         Map<Integer, Complex> returnDPFMap=FunctionGenerator.getReturnDPFMap(N, dpfMap);
-        System.out.println(returnDPFMap);
+        Map<Integer, Double> backFunction=new HashMap<>();
+        for (Integer i: returnDPFMap.keySet()){
+            backFunction.put(i, returnDPFMap.get(i).getReal());
+        }
+
+        gridPaneList.add(SceneMaker.getBackFunction(axisGenerator.getCustomXAxis(0, N, "m"), axisGenerator.getCustomYAxis(-0.5, 0.5, ""), backFunction));
 
         List<Complex> complexList=new ArrayList<>();
 
@@ -58,22 +63,32 @@ public class Fourier extends Application {
             complexList.add(new Complex(FunctionGenerator.getValueOfMainFunction(i)));
         }
 
-        List<Complex> resultFFT=FunctionGenerator.doBPF(complexList, NFFT, 1);
+        List<Complex> resultFFT=FunctionGenerator.doBPF(complexList, NFFT, -1);
 
         Map<Integer, Complex> resultFFTMap=new HashMap<>();
 
         for(int i=0; i<NFFT; ++i){
-            resultFFTMap.put(i, resultFFT.get(i));
+            resultFFTMap.put(i, new Complex(resultFFT.get(i).getReal()/NFFT, resultFFT.get(i).getImaginary()/NFFT));
         }
 
         Map<Integer, Double> amplitudeMapFFT=FunctionGenerator.getAmplitudeMap(resultFFTMap);
-        gridPaneList.add(SceneMaker.getAmplitudes(axisGenerator.getCustomXAxis(0, NFFT, "m"), axisGenerator.getCustomYAxis(-5, 5, ""), amplitudeMapFFT));
+        gridPaneList.add(SceneMaker.getAmplitudes(axisGenerator.getCustomXAxis(0, NFFT, "m"), axisGenerator.getCustomYAxis(-0.2, 0.8, ""), amplitudeMapFFT));
 
         Map<Integer, Double> phaseMapFFT=FunctionGenerator.getPhaseMap(resultFFTMap);
-        gridPaneList.add(SceneMaker.getPhases(axisGenerator.getCustomXAxis(0, NFFT, "m"), axisGenerator.getCustomYAxis(-10, 10, ""), phaseMapFFT));
+        gridPaneList.add(SceneMaker.getPhases(axisGenerator.getCustomXAxis(0, NFFT, "m"), axisGenerator.getCustomYAxis(-0.2, 0.2, ""), phaseMapFFT));
+
+        List<Complex> returnFFT=FunctionGenerator.doBPF(resultFFT, NFFT, 1);
+
+        Map<Integer, Double> backFunctionFFT=new HashMap<>();
+        for (int i=0; i<NFFT; ++i){
+            backFunctionFFT.put(i, returnFFT.get(i).getReal()/NFFT/NFFT);
+        }
+
+        gridPaneList.add(SceneMaker.getBackFunction(axisGenerator.getCustomXAxis(0, N, "m"), axisGenerator.getCustomYAxis(-0.5, 0.5, ""), backFunctionFFT));
 
 
-        System.out.println("\n"+resultFFT);
+        System.out.println(dpfMap);
+        System.out.println("\n"+resultFFTMap);
 
         makeScene(stage, gridPaneList);
         System.out.println("finish");

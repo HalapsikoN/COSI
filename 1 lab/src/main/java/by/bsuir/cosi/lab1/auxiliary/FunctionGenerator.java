@@ -14,7 +14,7 @@ public class FunctionGenerator {
     }
 
     public static double getValueOfMainFunction(double x){
-        return (Math.cos(3*x)+Math.sin(2*x));
+        return (x<0 || x>2*Math.PI) ? 0 : (Math.cos(3*x)+Math.sin(2*x));
     }
 
     public static Complex getDPFComponent(int m, int N){
@@ -34,7 +34,7 @@ public class FunctionGenerator {
         }
 
         real/=N;
-        imaginary/=N;
+        imaginary/=-N;
 
         return new Complex(real, imaginary);
     }
@@ -67,7 +67,7 @@ public class FunctionGenerator {
         Map<Integer, Double> result=new HashMap<>();
 
         for(Integer i:dpfMap.keySet()){
-            result.put(i, (1/ComplexLogic.getTan(dpfMap.get(i))));
+            result.put(i, (ComplexLogic.getArctan(dpfMap.get(i))));
         }
 
         return result;
@@ -139,8 +139,8 @@ public class FunctionGenerator {
         }
 
         for (int j=0; j<N/2; ++j){
-            result.set(j, ComplexLogic.amountOfTwoComlex(bEven.get(j), ComplexLogic.multiplicationOfTwoComplex(temp, bOdd.get(j))));
-            result.set(j+N/2, ComplexLogic.subtractionOfTwoComlex(bEven.get(j), ComplexLogic.multiplicationOfTwoComplex(temp, bOdd.get(j))));
+            result.set(j, ComplexLogic.amountOfTwoComplex(bEven.get(j), ComplexLogic.multiplicationOfTwoComplex(temp, bOdd.get(j))));
+            result.set(j+N/2, ComplexLogic.subtractionOfTwoComplex(bEven.get(j), ComplexLogic.multiplicationOfTwoComplex(temp, bOdd.get(j))));
             temp=ComplexLogic.multiplicationOfTwoComplex(temp, mainRootN);
         }
 

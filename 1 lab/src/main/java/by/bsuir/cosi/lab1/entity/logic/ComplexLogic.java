@@ -11,15 +11,19 @@ public class ComplexLogic {
         return Math.sqrt(Math.pow(complex.getReal(),2)+Math.pow(complex.getImaginary(), 2));
     }
 
-    public static double getTan(Complex complex){
-        return Math.tan(complex.getImaginary()/complex.getReal());
+    public static double getArctan(Complex complex){
+        Double result=Math.atan(complex.getImaginary()/complex.getReal());
+        if(result.isInfinite()){
+            result=999.999;
+        }
+        return result;
     }
 
-    public static Complex amountOfTwoComlex(Complex a, Complex b){
+    public static Complex amountOfTwoComplex(Complex a, Complex b){
         return new Complex(a.getReal()+b.getReal(), a.getImaginary()+b.getImaginary());
     }
 
-    public static Complex subtractionOfTwoComlex(Complex a, Complex b){
+    public static Complex subtractionOfTwoComplex(Complex a, Complex b){
         return new Complex(a.getReal()-b.getReal(), a.getImaginary()-b.getImaginary());
     }
 
