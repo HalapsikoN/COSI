@@ -44,10 +44,10 @@ public class Fourier extends Application {
         gridPaneList.add(SceneMaker.getDPF(axisGenerator.getCustomXAxis(0, N, "m"), axisGenerator.getCustomYAxis(-0.4, 0.8, "X(m)"), N));
 
         Map<Integer, Double> amplitudeMap=FunctionGenerator.getAmplitudeMap(dpfMap);
-        gridPaneList.add(SceneMaker.getAmplitudes(axisGenerator.getCustomXAxis(0, N, "m"), axisGenerator.getCustomYAxis(-0.2, 0.8, ""), amplitudeMap));
+        gridPaneList.add(SceneMaker.getAmplitudes(axisGenerator.getCustomXAxis(0, N, "frequency factor"), axisGenerator.getCustomYAxis(-0.2, 0.8, "Amplitude value"), amplitudeMap));
 
         Map<Integer, Double> phaseMap=FunctionGenerator.getPhaseMap(dpfMap);
-        gridPaneList.add(SceneMaker.getPhases(axisGenerator.getCustomXAxis(0, N, "m"), axisGenerator.getCustomYAxis(-0.2, 0.2, ""), phaseMap));
+        gridPaneList.add(SceneMaker.getPhases(axisGenerator.getCustomXAxis(0, N, "frequency factor"), axisGenerator.getCustomYAxis(-0.2, 0.2, "Phase value"), phaseMap));
 
         Map<Integer, Complex> returnDPFMap=FunctionGenerator.getReturnDPFMap(N, dpfMap);
         Map<Integer, Double> backFunction=new HashMap<>();
@@ -55,7 +55,7 @@ public class Fourier extends Application {
             backFunction.put(i, returnDPFMap.get(i).getReal());
         }
 
-        gridPaneList.add(SceneMaker.getBackFunction(axisGenerator.getCustomXAxis(0, N, "m"), axisGenerator.getCustomYAxis(-0.5, 0.5, ""), backFunction));
+        gridPaneList.add(SceneMaker.getBackFunction(axisGenerator.getCustomXAxis(0, N, "x"), axisGenerator.getCustomYAxis(-2, 2, "y"), backFunction));
 
         List<Complex> complexList=new ArrayList<>();
 
@@ -72,23 +72,25 @@ public class Fourier extends Application {
         }
 
         Map<Integer, Double> amplitudeMapFFT=FunctionGenerator.getAmplitudeMap(resultFFTMap);
-        gridPaneList.add(SceneMaker.getAmplitudes(axisGenerator.getCustomXAxis(0, NFFT, "m"), axisGenerator.getCustomYAxis(-0.2, 0.8, ""), amplitudeMapFFT));
+        gridPaneList.add(SceneMaker.getAmplitudes(axisGenerator.getCustomXAxis(0, NFFT, "frequency factor"), axisGenerator.getCustomYAxis(-0.2, 0.8, "Amplitude value"), amplitudeMapFFT));
 
         Map<Integer, Double> phaseMapFFT=FunctionGenerator.getPhaseMap(resultFFTMap);
-        gridPaneList.add(SceneMaker.getPhases(axisGenerator.getCustomXAxis(0, NFFT, "m"), axisGenerator.getCustomYAxis(-0.2, 0.2, ""), phaseMapFFT));
+        gridPaneList.add(SceneMaker.getPhases(axisGenerator.getCustomXAxis(0, NFFT, "frequency factor"), axisGenerator.getCustomYAxis(-0.2, 0.2, "Phase value"), phaseMapFFT));
 
         List<Complex> returnFFT=FunctionGenerator.doBPF(resultFFT, NFFT, 1);
 
         Map<Integer, Double> backFunctionFFT=new HashMap<>();
         for (int i=0; i<NFFT; ++i){
-            backFunctionFFT.put(i, returnFFT.get(i).getReal()/NFFT/NFFT);
+            backFunctionFFT.put(i, returnFFT.get(i).getReal()/NFFT);
         }
 
-        gridPaneList.add(SceneMaker.getBackFunction(axisGenerator.getCustomXAxis(0, N, "m"), axisGenerator.getCustomYAxis(-0.5, 0.5, ""), backFunctionFFT));
+        gridPaneList.add(SceneMaker.getBackFunction(axisGenerator.getCustomXAxis(0, NFFT, "x"), axisGenerator.getCustomYAxis(-2, 2, "y"), backFunctionFFT));
 
 
+        System.out.println("Fourier transform values:");
         System.out.println(dpfMap);
-        System.out.println("\n"+resultFFTMap);
+        System.out.println("\nFast fourier transform values:");
+        System.out.println(resultFFTMap);
 
         makeScene(stage, gridPaneList);
         System.out.println("finish");

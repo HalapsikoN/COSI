@@ -25,17 +25,7 @@ public class SceneMaker {
 
         lineChart.getData().add(mainSeries);
         lineChart.setStyle("CHART_COLOR_1: #00ff21 ;");
-        lineChart.setCreateSymbols(false);
-
-        GridPane gridPane=new GridPane();
-        gridPane.setGridLinesVisible(true);
-        gridPane.add(lineChart, 0, 0);
-
-        RowConstraints rowConstraints=new RowConstraints();
-        rowConstraints.setPercentHeight(100);
-        gridPane.getRowConstraints().add(rowConstraints);
-
-        return gridPane;
+        return setGridPaneUsualSettings(lineChart);
     }
 
     public static GridPane getDPF(NumberAxis xAxis, NumberAxis yAxis, int N){
@@ -48,6 +38,10 @@ public class SceneMaker {
         lineChart.getData().add(imgDPFPart);
         lineChart.setStyle("CHART_COLOR_1: #ff64e9 ;");
         lineChart.setStyle("CHART_COLOR_2: #2ff7ff ;");
+        return setGridPaneUsualSettings(lineChart);
+    }
+
+    private static GridPane setGridPaneUsualSettings(LineChart<Number, Number> lineChart) {
         lineChart.setCreateSymbols(false);
 
         GridPane gridPane=new GridPane();
@@ -68,17 +62,7 @@ public class SceneMaker {
 
         lineChart.getData().add(amplitudeSeries);
         lineChart.setStyle("CHART_COLOR_1: #c821ff ;");
-        lineChart.setCreateSymbols(false);
-
-        GridPane gridPane=new GridPane();
-        gridPane.setGridLinesVisible(true);
-        gridPane.add(lineChart, 0, 0);
-
-        RowConstraints rowConstraints=new RowConstraints();
-        rowConstraints.setPercentHeight(100);
-        gridPane.getRowConstraints().add(rowConstraints);
-
-        return gridPane;
+        return setGridPaneUsualSettings(lineChart);
     }
 
     public static GridPane getPhases(NumberAxis xAxis, NumberAxis yAxis, Map<Integer, Double> phaseMap){
@@ -90,17 +74,7 @@ public class SceneMaker {
 
         lineChart.getData().add(phaseSeries);
         lineChart.setStyle("CHART_COLOR_1: #ff9800 ;");
-        lineChart.setCreateSymbols(false);
-
-        GridPane gridPane=new GridPane();
-        gridPane.setGridLinesVisible(true);
-        gridPane.add(lineChart, 0, 0);
-
-        RowConstraints rowConstraints=new RowConstraints();
-        rowConstraints.setPercentHeight(100);
-        gridPane.getRowConstraints().add(rowConstraints);
-
-        return gridPane;
+        return setGridPaneUsualSettings(lineChart);
     }
 
     public static GridPane getBackFunction(NumberAxis xAxis, NumberAxis yAxis, Map<Integer, Double> functionMap){
@@ -110,16 +84,6 @@ public class SceneMaker {
 
         lineChart.getData().add(functionSeries);
         lineChart.setStyle("CHART_COLOR_1: #0b00ff ;");
-        lineChart.setCreateSymbols(false);
-
-        GridPane gridPane=new GridPane();
-        gridPane.setGridLinesVisible(true);
-        gridPane.add(lineChart, 0, 0);
-
-        RowConstraints rowConstraints=new RowConstraints();
-        rowConstraints.setPercentHeight(100);
-        gridPane.getRowConstraints().add(rowConstraints);
-
-        return gridPane;
+        return setGridPaneUsualSettings(lineChart);
     }
 }

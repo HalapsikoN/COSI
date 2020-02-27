@@ -15,6 +15,7 @@ public class FunctionGenerator {
 
     public static double getValueOfMainFunction(double x){
         return (x<0 || x>2*Math.PI) ? 0 : (Math.cos(3*x)+Math.sin(2*x));
+        //return (Math.cos(3*x)+Math.sin(2*x));
     }
 
     public static Complex getDPFComponent(int m, int N){
@@ -89,8 +90,6 @@ public class FunctionGenerator {
             imaginary+=dpfMap.get(i).getImaginary()*Math.cos(2*Math.PI*m*i/N)+dpfMap.get(i).getReal()*Math.sin(2*Math.PI*m*i/N);
         }
 
-        real/=N;
-        imaginary/=N;
 
         return new Complex(real, imaginary);
     }
