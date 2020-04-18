@@ -90,7 +90,6 @@ public class FunctionGenerator {
             imaginary+=dpfMap.get(i).getImaginary()*Math.cos(2*Math.PI*m*i/N)+dpfMap.get(i).getReal()*Math.sin(2*Math.PI*m*i/N);
         }
 
-
         return new Complex(real, imaginary);
     }
 
